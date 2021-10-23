@@ -18,6 +18,8 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class FPCameraController {
     
+    private Chunks chunk = new Chunks(0,0,0);
+    
     private Vector3f position = null;
     private Vector3f lPosition = null;
     
@@ -115,7 +117,7 @@ public class FPCameraController {
             glLoadIdentity();
             camera.lookThrough();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            render();
+            chunk.render();
             Display.update();
             Display.sync(60);
             
@@ -125,6 +127,28 @@ public class FPCameraController {
     }
     public void render(){
         try{
+            //pyramid
+            /*glColor3f(0.0f,1.0f,0.0f);
+            glBegin(GL_TRIANGLES);
+            glVertex3f(100,100,100);
+            glVertex3f(000,000,000);
+            glVertex3f(200,000,000);
+            
+            glColor3f(0.0f,0.0f,1.0f);
+            glVertex3f(100,100,100);
+            glVertex3f(200,000,000);
+            glVertex3f(200,000,200);
+            
+            glColor3f(0.0f,0.0f,1.0f);
+            glVertex3f(100,100,100);
+            glVertex3f(000,000,000);
+            glVertex3f(000,000,200);
+            
+            glColor3f(1.0f,1.0f,1.0f);
+            glVertex3f(100,100,100);
+            glVertex3f(200,000,200);
+            glVertex3f(000,000,200);
+            glEnd();*/
             glBegin(GL_QUADS);
             //top
                 glColor3f(0.0f,0.0f,1.0f);
@@ -150,7 +174,7 @@ public class FPCameraController {
                 glVertex3f(-1.0f,-1.0f,-1.0f);
                 glVertex3f(-1.0f,1.0f,-1.0f);
                 glVertex3f(1.0f,1.0f,-1.0f);
-                //left*/
+                //left
                 glColor3f(0.0f,1.0f,1.0f);
                 glVertex3f(-1.0f,1.0f,1.0f);
                 glVertex3f(-1.0f,1.0f,-1.0f);
@@ -163,6 +187,7 @@ public class FPCameraController {
                 glVertex3f(1.0f,-1.0f,1.0f);
                 glVertex3f(1.0f,-1.0f,-1.0f);
             glEnd();
+           
             //right
            /* glBegin(GL_LINE_LOOP);
                 glColor3f(0.0f,0.0f,0.0f);

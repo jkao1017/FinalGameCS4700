@@ -16,13 +16,15 @@ import org.lwjgl.util.glu.GLU;
  */
 public class FinalProject {
 
-    private FPCameraController fp = new FPCameraController(0f,0f,0f);
+    private FPCameraController fp;
     private DisplayMode displayMode;
     
     public void start(){
         try{
+            
             createWindow();
             initGL();
+            fp = new FPCameraController(0f,0f,0f);
             fp.gameLoop();
             
         }catch(Exception e){
@@ -46,6 +48,10 @@ public class FinalProject {
         glClearColor(0.0f,0.0f,0.0f,0.0f);
         glMatrixMode(GL_PROJECTION);
         glEnable(GL_DEPTH_TEST);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glLoadIdentity();
         GLU.gluPerspective(100.0f,(float)displayMode.getWidth()/(float)displayMode.getHeight(),0.1f,300.0f);
         glMatrixMode(GL_MODELVIEW);
