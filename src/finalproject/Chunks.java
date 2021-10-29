@@ -49,9 +49,14 @@ public class Chunks {
         FloatBuffer VertexPositionData = BufferUtils.createFloatBuffer((CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE) * 6 * 12);
         FloatBuffer VertexColorData = BufferUtils.createFloatBuffer((CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE) * 6 * 12);
         FloatBuffer VertexTextureData = BufferUtils.createFloatBuffer((CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE) * 6 * 12);
-        for(float x = 0; x < CHUNK_SIZE; x += 1){
-            for(float z = 0; z < CHUNK_SIZE; z += 1){
-                for(float y = 0; y < CHUNK_SIZE; y++){
+        
+        Random r = new Random();
+        SimplexNoise noise = new SimplexNoise(40, .05, r.nextInt());
+        
+        for(int x = 0; x < CHUNK_SIZE; x += 1){
+            for(int  z = 0; z < CHUNK_SIZE; z += 1){
+                float height = (startY + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH);
+                for(int y = 0; y < height; y++){
                     VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*.8)),(float)(startZ + z * CUBE_LENGTH)));
                     VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
                     VertexTextureData.put(createTexCube((float)0, (float)0,Blocks[(int)(x)][(int)(y)][(int)(z)]));
