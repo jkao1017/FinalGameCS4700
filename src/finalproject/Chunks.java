@@ -7,6 +7,7 @@ package finalproject;
 
 import java.util.Random;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.Random;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.*;
@@ -53,16 +54,46 @@ public class Chunks {
         Random r = new Random();
         SimplexNoise noise = new SimplexNoise(40, .05, r.nextInt());
         
-        for(int x = 0; x < CHUNK_SIZE; x += 1){
-            for(int  z = 0; z < CHUNK_SIZE; z += 1){
-                float height = (startY + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH);
-                for(int y = 0; y < height; y++){
+        ArrayList<ArrayList<Float>> heights = new ArrayList<>();
+        for(int x = 0; x < CHUNK_SIZE; x++){
+            ArrayList<Float> height = new ArrayList<>();
+            for(int  z = 0; z < CHUNK_SIZE; z++){
+                height.add((startY + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH));
+            }
+            heights.add(height);
+        }
+        
+        for(int x = 0; x < CHUNK_SIZE; x++) {
+            for(int z = 0; z < CHUNK_SIZE; z++) {
+                float height = Math.abs(heights.get(x).get(z));
+                for(int y = 0; y <= height; y++) {
+                    
                     VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*.8)),(float)(startZ + z * CUBE_LENGTH)));
                     VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
-                    VertexTextureData.put(createTexCube((float)0, (float)0,Blocks[(int)(x)][(int)(y)][(int)(z)]));
+                    
+                    if(y < height / 6) {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Bedrock));
+                    }
+                    else if(y < height / 3) {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Stone));
+                    }
+                    else if(y < height / 2) {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Dirt));
+                    }
+                    else if(y < 2 * height / 3) {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Water));
+                    }
+                    else if(y < 5 * height / 6) {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Sand));
+                    }
+                    else {
+                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Grass));
+                    }
                 }
             }
         }
+        
+        
         VertexTextureData.flip();
         VertexColorData.flip();
         VertexPositionData.flip();
@@ -77,10 +108,10 @@ public class Chunks {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         
     }
-    public static float[] createTexCube(float x, float y, Block block){
+    public static float[] createTexCube(float x, float y, Block.BlockType type){
         float offset = (1024f/16)/1024f;
-        switch(block.getID()){
-            case 0: 
+        switch(type){
+            case Grass: 
                 return new float[]{
                     //top quad 
                     x + offset*3, y + offset*10,
@@ -113,7 +144,7 @@ public class Chunks {
                     x + offset*4, y + offset*1, 
                     x + offset*3, y + offset*1
                 };
-            case 1: 
+            case Sand: 
                 return new float[]{
                     //bottom quad 
                     x + offset*3, y + offset*1,
@@ -146,7 +177,7 @@ public class Chunks {
                     x + offset*2, y + offset*2,
                     x + offset*2, y + offset*1,
                 };
-            case 2: 
+            case Water: 
                 return new float[]{
                     //bottom quad 
                     x + offset*2, y + offset*11,
@@ -179,7 +210,7 @@ public class Chunks {
                     x + offset*1, y + offset*12,
                     x + offset*1, y + offset*11,
                 };
-            case 3: 
+            case Dirt: 
                 return new float[]{
                     //bottom quad 
                     x + offset*3, y + offset*0,
@@ -212,7 +243,7 @@ public class Chunks {
                     x + offset*2, y + offset*1,
                     x + offset*2, y + offset*0,
                 };
-            case 4:
+            case Stone:
                 return new float[]{
                     //bottom quad 
                     x + offset*2, y + offset*0,
@@ -245,7 +276,7 @@ public class Chunks {
                     x + offset*1, y + offset*1,
                     x + offset*1, y + offset*0,
                 };
-            case 5: 
+            case Bedrock: 
                 return new float[]{
                     //bottom quad 
                     x + offset*2, y + offset*1,
@@ -372,18 +403,18 @@ public class Chunks {
             for(int y = 0; y < CHUNK_SIZE; y++){
                 for(int z = 0; z < CHUNK_SIZE; z++){
                     if(r.nextFloat() > 0.8f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Grass);
                     }else if(r.nextFloat() > 0.7f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Dirt);
                     }else if(r.nextFloat() > 0.5f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Water);
                     
                     }else if(r.nextFloat() > 0.4f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Sand);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Sand);
                     }else if(r.nextFloat() > 0.2f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Stone);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Stone);
                     }else{
-                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Bedrock);
+                        Blocks[x][y][z] = new Block(Block.BlockType.Bedrock);
                     }
                 }
             }

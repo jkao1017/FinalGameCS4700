@@ -66,7 +66,6 @@ public class SimplexNoise {
           result=result+octaves[i].noise(x/frequency, y/frequency,z/frequency)* amplitude;
         }
 
-
         return result;
 
     }
