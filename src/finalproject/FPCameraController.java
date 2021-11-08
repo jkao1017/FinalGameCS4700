@@ -51,40 +51,48 @@ public class FPCameraController {
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
         position.x -= xOffset;
         position.z += zOffset;
+        
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x-=xOffset).put(
-        lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+        lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        
+        
     }
     public void walkBackwards(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
         position.x += xOffset;
         position.z -= zOffset;
+        
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x-=xOffset).put(
-        lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+        lightPosition.put(lPosition.x+=xOffset).put(lPosition.y).put(lPosition.z-=zOffset).put(0.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        
+        
     }
     public void strafeLeft(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw-90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw-90));
         position.x -= xOffset;
         position.z += zOffset;
+        
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x-=xOffset).put(
-        lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);  
+        lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition); 
+        
+        
     }
     public void strafeRight(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw+90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw+90));
         position.x -= xOffset;
         position.z += zOffset;
+        
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x-=xOffset).put(
-        lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
+        lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        
+        
     }
     public void moveUp(float distance){
         position.y -= distance;
@@ -96,9 +104,9 @@ public class FPCameraController {
         glRotatef(pitch,1.0f,0.0f,0.0f);
         glRotatef(yaw,0.0f,1.0f,0.0f);
         glTranslatef(position.x,position.y,position.z);
+        
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x).put(
-        lPosition.y).put(lPosition.z).put(1.0f).flip();
+        lightPosition.put(lPosition.x).put(lPosition.y).put(lPosition.z).put(0.50f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
     public void gameLoop(){
