@@ -57,6 +57,9 @@ public class Chunks {
         for(int x = 0; x < CHUNK_SIZE; x += 1){
             for(int  z = 0; z < CHUNK_SIZE; z += 1){
                 float height = (22 + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH);
+                if(height > 30){
+                    height = 30;
+                }
                 System.out.println(height);
                 //System.out.println(height);
                 for(float y = 0; y < height; y++){

@@ -64,9 +64,9 @@ public class FPCameraController {
         position.x += xOffset;
         position.z -= zOffset;
         
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x+=xOffset).put(lPosition.y).put(lPosition.z-=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);*/
         
         
     }
@@ -76,9 +76,9 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition); 
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition); */
         
         
     }
@@ -88,9 +88,9 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);*/
         
         
     }
@@ -105,9 +105,7 @@ public class FPCameraController {
         glRotatef(yaw,0.0f,1.0f,0.0f);
         glTranslatef(position.x,position.y,position.z);
         
-        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x).put(lPosition.y).put(lPosition.z).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+       
     }
     public void gameLoop(){
         FPCameraController camera = new FPCameraController(0,0,0);
@@ -148,6 +146,10 @@ public class FPCameraController {
             glLoadIdentity();
             camera.lookThrough();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+            lightPosition.put(20).put(100).put(20).put(1.0f).flip();
+            glLight(GL_LIGHT0, GL_POSITION, lightPosition);
             
             chunk.render();
             Display.update();
