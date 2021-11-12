@@ -21,7 +21,7 @@ import org.lwjgl.BufferUtils;
  */
 public class FPCameraController {
     
-    private Chunks chunk = new Chunks(0,10,0);
+    private Chunks chunk = new Chunks(0,0,0);
     
     private Vector3f position = null;
     private Vector3f lPosition = null;
@@ -65,7 +65,7 @@ public class FPCameraController {
         position.z -= zOffset;
         
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x+=xOffset).put(lPosition.y).put(lPosition.z-=zOffset).put(0.0f).flip();
+        lightPosition.put(lPosition.x+=xOffset).put(lPosition.y).put(lPosition.z-=zOffset).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
         
         
@@ -106,7 +106,7 @@ public class FPCameraController {
         glTranslatef(position.x,position.y,position.z);
         
         FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(lPosition.x).put(lPosition.y).put(lPosition.z).put(0.50f).flip();
+        lightPosition.put(lPosition.x).put(lPosition.y).put(lPosition.z).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
     public void gameLoop(){

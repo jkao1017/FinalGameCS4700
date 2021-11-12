@@ -53,41 +53,34 @@ public class Chunks {
         
         Random r = new Random();
         SimplexNoise noise = new SimplexNoise(40, .05, r.nextInt());
-                   
-        ArrayList<ArrayList<Float>> heights = new ArrayList<>();
-        for(int x = 0; x < CHUNK_SIZE; x++){
-            ArrayList<Float> height = new ArrayList<>();
-            for(int  z = 0; z < CHUNK_SIZE; z++){
-                height.add((22 + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH));
-            }
-            heights.add(height);
-        }
         
-        for(int x = 0; x < CHUNK_SIZE; x++) {
-            for(int z = 0; z < CHUNK_SIZE; z++) {
-                float height = Math.abs(heights.get(x).get(z));
-                for(int y = 0; y <= height; y++) {
+        for(int x = 0; x < CHUNK_SIZE; x += 1){
+            for(int  z = 0; z < CHUNK_SIZE; z += 1){
+                float height = (22 + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH);
+                System.out.println(height);
+                //System.out.println(height);
+                for(float y = 0; y < height; y++){
                     VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*.8)),(float)(startZ + z * CUBE_LENGTH)));
                     VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
+                    if(y == height-1){
+                        if(r.nextFloat() > 0.6){
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
+                        }else if(r.nextFloat() > 0.3){
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Water));
+                        }else{
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Sand));
+                        }
+                        
+                    }else if(y == 0){
+                        VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Bedrock));
+                    }else{
+                        if(r.nextFloat() > 0.5f){
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Stone));
+                        }else{
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Dirt));
+                        }
+                    }
                     
-                    if(y < height / 6) {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Bedrock));
-                    }
-                    else if(y < height / 3) {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Stone));
-                    }
-                    else if(y < height / 2) {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Dirt));
-                    }
-                    else if(y < 2 * height / 3) {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Water));
-                    }
-                    else if(y < 5 * height / 6) {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Sand));
-                    }
-                    else {
-                        VertexTextureData.put(createTexCube((float)0, (float)0, Block.BlockType.Grass));
-                    }
                 }
             }
            
