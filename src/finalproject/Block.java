@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*************************************************************** *
+ * file: Block.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file defines a block and its different types
+ * ****************************************************************/ 
+
 package finalproject;
 
-/**
- *
- * @author jkao1
- */
 public class Block {
     private boolean isActive;
     private BlockType Type;
@@ -38,17 +38,29 @@ public class Block {
     public Block(BlockType type){
         Type = type;
     }
+    
+    // method: setCoords
+    // purpose: this method sets the coordinates of the block
     public void setCoords(float x, float y, float z){
             this.x = x;
             this.y = y;
             this.z = z;
     }
+    
+    // method: isActive
+    // purpose: this method returns the active status of a block
     public boolean isActive(){
         return isActive;
     }
+    
+    // method: setActive
+    // purpose: this method sets the active status of a block
     public void setActive(boolean active){
         isActive = active;
     }
+    
+    // method: getId
+    // purpose: this method returns the id of a block
     public int getID(){
         return Type.GetID();
     }

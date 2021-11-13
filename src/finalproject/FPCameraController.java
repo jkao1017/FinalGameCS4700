@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*************************************************************** *
+ * file: FPCameraConterller.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file defines a first person camera
+ * ****************************************************************/ 
+
 package finalproject;
 
 import org.lwjgl.Sys;
@@ -14,11 +18,6 @@ import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
-
-/**
- *
- * @author jkao1
- */
 public class FPCameraController {
     
     private Chunks chunk = new Chunks(0,0,0);
@@ -40,12 +39,20 @@ public class FPCameraController {
         lPosition.z = 0f;
     }
     
+    //method: yaw
+    //purpose: modify yaw by set amount
     public void yaw(float amount){
         yaw += amount;
     }
+    
+    //method: pitch
+    //purpose: modify pitch by set amount
     public void pitch(float amount){
         pitch -= amount;
     }
+    
+    //method: walkForward
+    //purpose: modify position based on distance moved forward
     public void walkForward(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
@@ -58,6 +65,9 @@ public class FPCameraController {
         
         
     }
+    
+    //method: walkBackwards
+    //purpose: modify position based on distance moved backward
     public void walkBackwards(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
@@ -70,6 +80,9 @@ public class FPCameraController {
         
         
     }
+    
+    //method: strafeLeft
+    //purpose: modify position based on distance moved to the left
     public void strafeLeft(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw-90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw-90));
@@ -82,6 +95,9 @@ public class FPCameraController {
         
         
     }
+    
+    //method: strafeRight
+    //purpose: modify position based on distance moved to the right
     public void strafeRight(float distance){
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw+90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw+90));
@@ -94,19 +110,30 @@ public class FPCameraController {
         
         
     }
+    
+    //method: moveUp
+    //purpose: modify position based on distance moved up
     public void moveUp(float distance){
         position.y -= distance;
     }
+    
+    //method: moveDown
+    //purpose: modify position based on distance moved down
     public void moveDown(float distance){
         position.y += distance;
     }
+    
+    //method: lookThrough
+    //purpose: transformation matrices for distance moved, and view change
     public void lookThrough(){
         glRotatef(pitch,1.0f,0.0f,0.0f);
         glRotatef(yaw,0.0f,1.0f,0.0f);
         glTranslatef(position.x,position.y,position.z);
-        
-       
     }
+    
+    //method: gameLoop
+    //purpose: responsible for keeping track of inputs, camera 
+    //view and pos every frame, as well as lighting.
     public void gameLoop(){
         FPCameraController camera = new FPCameraController(0,0,0);
         float dx = 0.0f;
@@ -157,125 +184,5 @@ public class FPCameraController {
             
         }
         Display.destroy();
-        
-    }
-    public void render(){
-        try{
-            //pyramid
-            /*glColor3f(0.0f,1.0f,0.0f);
-            glBegin(GL_TRIANGLES);
-            glVertex3f(100,100,100);
-            glVertex3f(000,000,000);
-            glVertex3f(200,000,000);
-            
-            glColor3f(0.0f,0.0f,1.0f);
-            glVertex3f(100,100,100);
-            glVertex3f(200,000,000);
-            glVertex3f(200,000,200);
-            
-            glColor3f(0.0f,0.0f,1.0f);
-            glVertex3f(100,100,100);
-            glVertex3f(000,000,000);
-            glVertex3f(000,000,200);
-            
-            glColor3f(1.0f,1.0f,1.0f);
-            glVertex3f(100,100,100);
-            glVertex3f(200,000,200);
-            glVertex3f(000,000,200);
-            glEnd();*/
-            glBegin(GL_QUADS);
-            //top
-                glColor3f(0.0f,0.0f,1.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-                //bottom
-                glColor3f(1.0f,0.0f,0.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-                //front
-                glColor3f(0.0f,1.0f,0.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                //back
-                glColor3f(1.0f,1.0f,0.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                //left
-                glColor3f(0.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-                //right
-                glColor3f(1.0f,0.0f,1.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-            glEnd();
-           
-            //right
-           /* glBegin(GL_LINE_LOOP);
-                glColor3f(0.0f,0.0f,0.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-            glEnd();
-            //top
-            glBegin(GL_LINE_LOOP);
-                glColor3f(0.0f,0.0f,0.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-            glEnd();
-            //bottom
-                glBegin(GL_LINE_LOOP);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-            glEnd();
-            //front
-                glVertex3f(1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-            glEnd();
-            //back
-            glBegin(GL_LINE_LOOP);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(1.0f,1.0f,-1.0f);
-            glEnd();
-            //left
-            glBegin(GL_LINE_LOOP);
-                glVertex3f(-1.0f,1.0f,1.0f);
-                glVertex3f(-1.0f,1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,1.0f);
-            glEnd();
-            //right
-            glBegin(GL_LINE_LOOP);
-                glVertex3f(1.0f,1.0f,-1.0f);
-                glVertex3f(1.0f,1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,1.0f);
-                glVertex3f(1.0f,-1.0f,-1.0f);
-            glEnd();
-            */       
-            
-        }catch(Exception e){
-            
-        }
     }
 }

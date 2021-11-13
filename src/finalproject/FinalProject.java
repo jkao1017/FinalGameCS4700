@@ -1,8 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*************************************************************** *
+ * file: FinalProject.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file is responsible for initializing everything and starting the program.
+ * ****************************************************************/ 
 package finalproject;
 
 import org.lwjgl.opengl.Display;
@@ -13,17 +16,14 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
 
-/**
- *
- * @author jkao1
- */
 public class FinalProject {
-
     private FPCameraController fp;
     private DisplayMode displayMode;
     private FloatBuffer lightPosition;
     private FloatBuffer whiteLight;
     
+    //method: start
+    //purpose: initalizes window and camera 
     public void start(){
         try{
             
@@ -36,6 +36,9 @@ public class FinalProject {
             e.printStackTrace();
         }
     }
+    
+    //method: createWindow
+    //purpose: creates a window
     private void createWindow() throws Exception{
         Display.setFullscreen(false);
         DisplayMode d[] = Display.getAvailableDisplayModes();
@@ -49,6 +52,7 @@ public class FinalProject {
         Display.setTitle("Final Project");
         Display.create();
     }
+    
     private void initGL(){
         glClearColor(0.0f,0.0f,0.0f,0.0f);
         glMatrixMode(GL_PROJECTION);
@@ -72,18 +76,17 @@ public class FinalProject {
         glEnable(GL_LIGHT0);//enables light0
     }
     
-        private void initLightArrays() {
-            lightPosition = BufferUtils.createFloatBuffer(4);
-            lightPosition.put(30.0f).put(100.0f).put(30.0f).put(1.0f).flip();
-            whiteLight = BufferUtils.createFloatBuffer(4);
-            whiteLight.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
-        }
-    /**
-     * @param args the command line arguments
-     */
+    //method: initLightArrays
+    //purpose: initalizes light
+    private void initLightArrays() {
+        lightPosition = BufferUtils.createFloatBuffer(4);
+        lightPosition.put(30.0f).put(100.0f).put(30.0f).put(1.0f).flip();
+        whiteLight = BufferUtils.createFloatBuffer(4);
+        whiteLight.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
+    }
+    
     public static void main(String[] args) {
         FinalProject basic = new FinalProject();
         basic.start();
     }
-    
 }

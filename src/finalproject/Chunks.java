@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*************************************************************** *
+ * file: Chunks.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file defines a chunk and builds it
+ * ****************************************************************/ 
+
 package finalproject;
 
 import java.util.Random;
@@ -16,10 +20,6 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-/**
- *
- * @author jkao1
- */
 public class Chunks {
     static final int CHUNK_SIZE = 30;
     static final int CUBE_LENGTH = 2;
@@ -31,6 +31,9 @@ public class Chunks {
     private int StartX, StartY, StartZ;
     
     private Random  r;
+    
+    //method: render
+    //purpose: sets up render mode
     public void render(){
         glPushMatrix();
             glBindBuffer(GL_ARRAY_BUFFER, VBOVertexHandle);
@@ -43,6 +46,10 @@ public class Chunks {
             glDrawArrays(GL_QUADS, 0, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 24);
         glPopMatrix();
     }
+    
+    //method: rebuildMesh
+    //purpose: responsible for generating the cubes in a chunk. Uses simplex to 
+    //generate terrain, but also organizes by block types
     public void rebuildMesh(float startX, float startY, float startZ){
         VBOColorHandle = glGenBuffers();
         VBOVertexHandle = glGenBuffers();
@@ -68,27 +75,28 @@ public class Chunks {
                     if(y == height-1){
                         if(r.nextFloat() > 0.6){
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
-                        }else if(r.nextFloat() > 0.3){
+                        }
+                        else if(r.nextFloat() > 0.3){
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Water));
-                        }else{
+                        }
+                        else{
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Sand));
                         }
-                        
-                    }else if(y == 0){
+                    }
+                    else if(y == 0){
                         VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Bedrock));
-                    }else{
+                    }
+                    else{
                         if(r.nextFloat() > 0.5f){
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Stone));
-                        }else{
+                        }
+                        else{
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Dirt));
                         }
                     }
-                    
                 }
             }
-           
         }
-        
         
         VertexTextureData.flip();
         VertexColorData.flip();
@@ -104,6 +112,9 @@ public class Chunks {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         
     }
+    
+    //method:createTexCube
+    //purpose: creates a textured cube given a block type, x, and y
     public static float[] createTexCube(float x, float y, Block.BlockType type){
         float offset = (1024f/16)/1024f;
         switch(type){
@@ -339,6 +350,9 @@ public class Chunks {
                     x + offset*3, y + offset*1
                 };
     }
+    
+    //method: createCuebVertexCol
+    //purpose: 
     private float[] createCubeVertexCol(float[] CubeColorArray){
         float [] cubeColors = new float[CubeColorArray.length * 4 * 6];
         for(int i = 0; i < cubeColors.length; i++){
@@ -346,6 +360,9 @@ public class Chunks {
         }
         return cubeColors;
     }
+    
+    //method: createCube
+    //purpose: creates a cube for a given position
     private static float[] createCube(float x, float y, float z){
         int offset = CUBE_LENGTH / 2;
         return new float[]{
@@ -382,10 +399,13 @@ public class Chunks {
 
         };
     }
+    
+    //method: getCubeColor
+    //purpose:
     private float[] getCubeColor(Block block){
-
         return new float[]{1,1,1};
     }
+    
     public Chunks(int startX, int startY, int startZ){
         try{
             texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
