@@ -64,9 +64,9 @@ public class FPCameraController {
         position.x += xOffset;
         position.z -= zOffset;
         
-       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x+=xOffset).put(lPosition.y).put(lPosition.z-=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);*/
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
         
         
     }
@@ -76,9 +76,9 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition); */
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition); 
         
         
     }
@@ -88,9 +88,9 @@ public class FPCameraController {
         position.x -= xOffset;
         position.z += zOffset;
         
-       /* FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+       FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);*/
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
         
         
     }
@@ -148,7 +148,7 @@ public class FPCameraController {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-            lightPosition.put(20).put(100).put(20).put(1.0f).flip();
+            lightPosition.put(60).put(120).put(60).put(2.0f).flip();
             glLight(GL_LIGHT0, GL_POSITION, lightPosition);
             
             chunk.render();
