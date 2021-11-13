@@ -61,7 +61,9 @@ public class FinalProject {
         GLU.gluPerspective(100.0f,(float)displayMode.getWidth()/(float)displayMode.getHeight(),0.1f,300.0f);
         glMatrixMode(GL_MODELVIEW);
         glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
+        
         initLightArrays();
+        glShadeModel(GL_SMOOTH);
         glLight(GL_LIGHT0, GL_POSITION, lightPosition); //sets our light’s position
         glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);//sets our specular light
         glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);//sets our diffuse light
