@@ -56,8 +56,8 @@ public class Lake
     
         Random r = new Random();
         LAKE_DEPTH = r.nextInt(10) + 1;
-        LAKE_AREA = r.nextInt(30) + 1;
-        LAKE_SPREAD = r.nextInt(30) + 1;
+        LAKE_AREA = r.nextInt(15) + 1;
+        LAKE_SPREAD = r.nextInt(15) + 1;
         VBOTextureHandle = glGenBuffers();
         VBOColorHandle = glGenBuffers();
         VBOVertexHandle = glGenBuffers();

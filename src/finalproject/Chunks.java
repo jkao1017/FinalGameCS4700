@@ -24,6 +24,8 @@ public class Chunks {
     static final int CHUNK_SIZE = 30;
     static final int CUBE_LENGTH = 2;
     static final int MAX_LAKES = 5;
+    
+    private int chunkMaxLakes;
     private Block[][][] Blocks;
     private ArrayList<Lake> lakes;
     private int VBOVertexHandle;
@@ -86,7 +88,7 @@ public class Chunks {
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
                         }
                         else if(r.nextFloat() > 0.3){
-                            if(lakes.size() < MAX_LAKES)
+                            if(lakes.size() < chunkMaxLakes)
                                 lakes.add(new Lake((int) xPos, (int) yPos, (int) zPos));
                         }
                         else{
@@ -447,6 +449,7 @@ public class Chunks {
         StartY = startY;
         StartZ = startZ;
         
+        chunkMaxLakes = r.nextInt(MAX_LAKES);
         lakes = new ArrayList<>();
         rebuildMesh(startX, startY,startZ);
     }
