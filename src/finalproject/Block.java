@@ -35,6 +35,10 @@ public class Block {
         }
     }
     
+   public Block() {
+       isActive = true;
+   }
+    
     public Block(BlockType type){
         Type = type;
     }

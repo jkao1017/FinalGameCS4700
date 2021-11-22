@@ -23,7 +23,9 @@ import org.newdawn.slick.util.ResourceLoader;
 public class Chunks {
     static final int CHUNK_SIZE = 30;
     static final int CUBE_LENGTH = 2;
+    static final int MAX_LAKES = 5;
     private Block[][][] Blocks;
+    private ArrayList<Lake> lakes;
     private int VBOVertexHandle;
     private int VBOColorHandle;
     private int VBOTextureHandle;
@@ -45,6 +47,8 @@ public class Chunks {
             glTexCoordPointer(2, GL_FLOAT,0,0L);
             glDrawArrays(GL_QUADS, 0, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 24);
         glPopMatrix();
+        for(int i = 0; i < lakes.size(); i++)
+            lakes.get(i).render();
     }
     
     //method: rebuildMesh
@@ -67,30 +71,44 @@ public class Chunks {
                 if(height > 30){
                     height = 30;
                 }
-                System.out.println(height);
-                //System.out.println(height);
                 for(float y = 0; y < height; y++){
-                    VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*.8)),(float)(startZ + z * CUBE_LENGTH)));
-                    VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
-                    if(y == height-1){
+                    float xPos = (float) startX + x * CUBE_LENGTH;
+                    float yPos = (float) y * CUBE_LENGTH + CHUNK_SIZE*.8f;
+                    float zPos = (float) startZ + z * CUBE_LENGTH;
+                    
+                   float[] vertex = createCube(xPos, yPos, zPos);
+                   float[] color = createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z]));
+                   
+                    if(y == height - 1){
                         if(r.nextFloat() > 0.6){
+                            VertexPositionData.put(vertex);
+                            VertexColorData.put(color);
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
                         }
                         else if(r.nextFloat() > 0.3){
-                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Water));
+                            if(lakes.size() < MAX_LAKES)
+                                lakes.add(new Lake((int) xPos, (int) yPos, (int) zPos));
                         }
                         else{
+                            VertexPositionData.put(vertex);
+                            VertexColorData.put(color);
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Sand));
                         }
                     }
                     else if(y == 0){
+                        VertexPositionData.put(vertex);
+                        VertexColorData.put(color);
                         VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Bedrock));
                     }
                     else{
                         if(r.nextFloat() > 0.5f){
+                            VertexPositionData.put(vertex);
+                            VertexColorData.put(color);
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Stone));
                         }
                         else{
+                            VertexPositionData.put(vertex);
+                            VertexColorData.put(color);
                             VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Dirt));
                         }
                     }
@@ -418,20 +436,7 @@ public class Chunks {
         for(int x = 0; x < CHUNK_SIZE; x++){
             for(int y = 0; y < CHUNK_SIZE; y++){
                 for(int z = 0; z < CHUNK_SIZE; z++){
-                    if(r.nextFloat() > 0.8f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.Grass);
-                    }else if(r.nextFloat() > 0.7f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.Dirt);
-                    }else if(r.nextFloat() > 0.5f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.Water);
-                    
-                    }else if(r.nextFloat() > 0.4f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.Sand);
-                    }else if(r.nextFloat() > 0.2f){
-                        Blocks[x][y][z] = new Block(Block.BlockType.Stone);
-                    }else{
-                        Blocks[x][y][z] = new Block(Block.BlockType.Bedrock);
-                    }
+                    Blocks[x][y][z] = new Block();
                 }
             }
         }
@@ -441,6 +446,8 @@ public class Chunks {
         StartX = startX;
         StartY = startY;
         StartZ = startZ;
+        
+        lakes = new ArrayList<>();
         rebuildMesh(startX, startY,startZ);
     }
 }
