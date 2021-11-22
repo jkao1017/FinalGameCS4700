@@ -45,17 +45,23 @@ public class FPCameraController{
             chunks.add(new Chunks(xCurr, 0, zCurr));
             boolean incr = false;
             if(Math.random() <= .5) {
-                xCurr += offset;
+                if(Math.random() <= .5)
+                    xCurr += offset;
+                else
+                    xCurr -= offset;
                 incr = true;
             }
             if(Math.random() > .5) {
-                zCurr += offset;
+                if(Math.random() <= .5)
+                    zCurr += offset;
+                else
+                    zCurr -= offset;
                 incr = true;
             }
             if(!incr) {
                 double r = Math.random();
-                xCurr += r <= .5 ? offset : 0;
-                zCurr += r > .5 ? offset : 0;
+                xCurr += r <= .5 ? (Math.random() >= .5 ? offset : -offset) : 0;
+                zCurr += r > .5 ? (Math.random() >= .5 ? offset : -offset) : 0;
             }
         }
     }
