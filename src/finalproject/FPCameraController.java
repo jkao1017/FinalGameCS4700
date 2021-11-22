@@ -16,14 +16,15 @@ import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Random;
 import org.lwjgl.BufferUtils;
 
-public class FPCameraController {
-    
-    private Chunks chunk = new Chunks(0,0,0);
-    
-    private Vector3f position = null;
-    private Vector3f lPosition = null;
+public class FPCameraController{
+    private final int MAX_CHUNKS = 3;
+    private ArrayList<Chunks> chunks;
+    private Vector3f position;
+    private Vector3f lPosition;
     
     //rotation around the Y axis of the camera
     private float yaw = 0.0f;
@@ -37,6 +38,26 @@ public class FPCameraController {
         lPosition.x = 0f;
         lPosition.y = 15f;
         lPosition.z = 0f;
+        
+        chunks = new ArrayList<>();
+        int offset = Chunks.CHUNK_SIZE * Chunks.CUBE_LENGTH;
+        for(int i = 0, xCurr = 0, zCurr = 0; i < MAX_CHUNKS; i++) {
+            chunks.add(new Chunks(xCurr, 0, zCurr));
+            boolean incr = false;
+            if(Math.random() <= .5) {
+                xCurr += offset;
+                incr = true;
+            }
+            if(Math.random() > .5) {
+                zCurr += offset;
+                incr = true;
+            }
+            if(!incr) {
+                double r = Math.random();
+                xCurr += r <= .5 ? offset : 0;
+                zCurr += r > .5 ? offset : 0;
+            }
+        }
     }
     
     //method: yaw
@@ -178,7 +199,8 @@ public class FPCameraController {
             lightPosition.put(60).put(120).put(60).put(2.0f).flip();
             glLight(GL_LIGHT0, GL_POSITION, lightPosition);
             
-            chunk.render();
+            for(Chunks chunk : chunks)
+                chunk.render();
             Display.update();
             Display.sync(60);
             

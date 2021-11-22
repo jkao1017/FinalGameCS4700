@@ -81,7 +81,6 @@ public class Lake
     }
     
     private void rebuildMesh(int startX, int startY, int startZ) {
-        System.out.println(LAKE_AREA + " " + LAKE_DEPTH + " " + LAKE_SPREAD);
         FloatBuffer VertexPositionData = BufferUtils.createFloatBuffer((LAKE_AREA * LAKE_DEPTH * LAKE_SPREAD) * 6 * 12);
         FloatBuffer VertexColorData = BufferUtils.createFloatBuffer((LAKE_AREA * LAKE_DEPTH * LAKE_SPREAD) * 6 * 12);
         FloatBuffer VertexTextureData = BufferUtils.createFloatBuffer((LAKE_AREA * LAKE_DEPTH * LAKE_SPREAD) * 6 * 12);
