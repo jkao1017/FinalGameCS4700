@@ -1,3 +1,12 @@
+/*************************************************************** *
+ * file: SimplexNoise.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file is responsible for generating the noise which we use to generate random terrain.
+ * ****************************************************************/ 
+
 package finalproject;
 import java.util.Random;
 
@@ -30,17 +39,11 @@ public class SimplexNoise {
 
             frequencys[i] = Math.pow(2,i);
             amplitudes[i] = Math.pow(persistence,octaves.length-i);
-
-
-
-
         }
-
     }
 
 
     public double getNoise(int x, int y){
-
         double result=0;
 
         for(int i=0;i<octaves.length;i++){
@@ -49,24 +52,17 @@ public class SimplexNoise {
 
           result=result+octaves[i].noise(x/frequencys[i], y/frequencys[i])* amplitudes[i];
         }
-
-
         return result;
-
     }
 
     public double getNoise(int x,int y, int z){
-
         double result=0;
-
         for(int i=0;i<octaves.length;i++){
           double frequency = Math.pow(2,i);
           double amplitude = Math.pow(persistence,octaves.length-i);
 
           result=result+octaves[i].noise(x/frequency, y/frequency,z/frequency)* amplitude;
         }
-
         return result;
-
     }
 } 

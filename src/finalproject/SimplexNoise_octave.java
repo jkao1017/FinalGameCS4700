@@ -1,3 +1,12 @@
+/*************************************************************** *
+ * file: SimplexNoiseOctave.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Checkpoint 3 
+ * date last modified: 11/12/2021 * 
+ * purpose: This file is responsible for generating the noise which we use to generate random terrain.
+ * ****************************************************************/ 
+
 package finalproject;
 
 import java.awt.Color;
@@ -6,24 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
-
-/*
- * A speed-improved simplex noise algorithm for 2D, 3D and 4D in Java.
- *
- * Based on example code by Stefan Gustavson (stegu@itn.liu.se).
- * Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
- * Better rank ordering method by Stefan Gustavson in 2012.
- *
- * This could be speeded up even further, but it's useful as it is.
- *
- * Version 2012-03-09
- *
- * This code was placed in the public domain by its original author,
- * Stefan Gustavson. You may use it as you see fit, but
- * attribution is appreciated.
- *
- */
 
 public class SimplexNoise_octave {  // Simplex noise in 2D, 3D and 4D
 
