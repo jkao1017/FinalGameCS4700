@@ -60,10 +60,10 @@ public class Chunks {
                 if(height > 30){
                     height = 30;
                 }
-                System.out.println(height);
+               // System.out.println(height);
                 //System.out.println(height);
                 for(float y = 0; y < height; y++){
-                    VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH+(int)(CHUNK_SIZE*.8)),(float)(startZ + z * CUBE_LENGTH)));
+                    VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH),(float)(startZ + z * CUBE_LENGTH)));
                     VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
                     if(y == height-1){
                         if(r.nextFloat() > 0.6){
@@ -421,6 +421,7 @@ public class Chunks {
         StartX = startX;
         StartY = startY;
         StartZ = startZ;
+        System.out.println(startX);
         rebuildMesh(startX, startY,startZ);
     }
 }

@@ -148,7 +148,7 @@ public class FPCameraController {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-            lightPosition.put(20).put(100).put(20).put(1.0f).flip();
+            lightPosition.put(60.0f).put(120.0f).put(60.0f).put(2.0f).flip();
             glLight(GL_LIGHT0, GL_POSITION, lightPosition);
             
             chunk.render();
