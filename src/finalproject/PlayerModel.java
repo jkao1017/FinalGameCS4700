@@ -2,7 +2,7 @@
  * file: PlayerModel.java 
  * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
  * class: CS 4450- Computer Graphics * 
- * assignment: Final Checkpoint 
+ * assignment: Final Checkpoint  
  * date last modified: 11/26/2021 * 
  * purpose: This file uses chunks code to make a player model
  * ****************************************************************/ 

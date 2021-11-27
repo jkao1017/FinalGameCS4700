@@ -1,8 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*************************************************************** *
+ * file: gameLoops.java 
+ * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
+ * class: CS 4450- Computer Graphics * 
+ * assignment: Final Checkpoint 
+ * date last modified: 11/26/2021 * 
+ * purpose: This file generates lakes
+ * ****************************************************************/ 
 package finalproject;
 
 import static finalproject.Chunks.CHUNK_SIZE;

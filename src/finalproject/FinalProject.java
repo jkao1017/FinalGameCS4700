@@ -2,7 +2,7 @@
  * file: FinalProject.java 
  * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
  * class: CS 4450- Computer Graphics * 
- * assignment: Checkpoint 3 
+ * assignment: Final Checkpoint  
  * date last modified: 11/26/2021 * 
  * purpose: This file is responsible for initializing everything and starting the program.
  * ****************************************************************/ 
@@ -45,7 +45,7 @@ public class FinalProject {
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for(int i = 0; i< d.length; i++){
             //640 480
-            if(d[i].getWidth() == 1920 && d[i].getHeight() == 1080 && d[i].getBitsPerPixel() == 32){
+            if(d[i].getWidth() == 640 && d[i].getHeight() == 480 && d[i].getBitsPerPixel() == 32){
                 displayMode = d[i];
                 break;
             } 

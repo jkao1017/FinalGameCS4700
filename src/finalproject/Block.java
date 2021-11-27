@@ -2,7 +2,7 @@
  * file: Block.java 
  * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
  * class: CS 4450- Computer Graphics * 
- * assignment: Checkpoint 3 
+ * assignment: Final Checkpoint  
  * date last modified: 11/12/2021 * 
  * purpose: This file defines a block and its different types
  * ****************************************************************/ 
