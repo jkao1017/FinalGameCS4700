@@ -21,10 +21,13 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Chunks {
+    
     static final int CHUNK_SIZE = 30;
     static final int CUBE_LENGTH = 2;
     static final int MAX_LAKES = 5;
     
+    float[][]heights;
+
     private int chunkMaxLakes;
     private Block[][][] Blocks;
     private ArrayList<Lake> lakes;
@@ -32,7 +35,7 @@ public class Chunks {
     private int VBOColorHandle;
     private int VBOTextureHandle;
     private Texture texture;
-    private int StartX, StartY, StartZ;
+    public int StartX, StartY, StartZ;
     
     private Random  r;
     
@@ -49,8 +52,26 @@ public class Chunks {
             glTexCoordPointer(2, GL_FLOAT,0,0L);
             glDrawArrays(GL_QUADS, 0, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 24);
         glPopMatrix();
-        for(int i = 0; i < lakes.size(); i++)
-            lakes.get(i).render();
+
+    }
+
+    //This function takes in the X and Z position of the camera model in the world
+    //and calculates which block the camera is standing on. It then takes the height
+    //of that block and returns it.
+    public float getHeightOfTerrain(float worldX, float worldZ){
+        float terrainX = worldX + 1 - StartX;
+        float terrainZ = worldZ - StartZ;
+
+        
+        int gridX = ((int)Math.floor(terrainX/ CUBE_LENGTH)) * -1;
+        
+        int gridZ = ((int)Math.floor(terrainZ/ CUBE_LENGTH)) * -1;
+
+        if(gridX >= heights.length || gridZ >= heights.length || gridX < 0 || gridZ < 0){
+            return -100;
+        }
+        
+        return heights[gridX][gridZ];
     }
     
     //method: rebuildMesh
@@ -67,54 +88,54 @@ public class Chunks {
         Random r = new Random();
         SimplexNoise noise = new SimplexNoise(40, .05, r.nextInt());
         
+       heights = new float[CHUNK_SIZE][CHUNK_SIZE];
+        
+        int lakeHeight = 20; //maximum height that water will generate
+        int lakeDepth = 0; //depth of the lake
+        int maxDepth = 10; // maximum depth that the lake can generate to
+        
         for(int x = 0; x < CHUNK_SIZE; x += 1){
             for(int  z = 0; z < CHUNK_SIZE; z += 1){
                 float height = (22 + (int)(100*noise.getNoise(x, z)) * CUBE_LENGTH);
+
+                              
+          
                 if(height > 30){
                     height = 30;
                 }
+                if(height < lakeHeight){
+                    height = lakeHeight;
+                }
+                heights[x][z] = height;
+                lakeDepth = r.nextInt((int)height - 3 - maxDepth) + maxDepth;
+                
                 for(float y = 0; y < height; y++){
-                    float xPos = (float) startX + x * CUBE_LENGTH;
-                    float yPos = (float) y * CUBE_LENGTH + CHUNK_SIZE*.8f;
-                    float zPos = (float) startZ + z * CUBE_LENGTH;
                     
-                   float[] vertex = createCube(xPos, yPos, zPos);
-                   float[] color = createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z]));
-                   
-                    if(y == height - 1){
+                    VertexPositionData.put(createCube((float)(startX + x * CUBE_LENGTH), (float)(y*CUBE_LENGTH),(float)(startZ + z * CUBE_LENGTH)));
+                    VertexColorData.put(createCubeVertexCol(getCubeColor(Blocks[(int)x][(int)y][(int)z])));
+   
+                    if(height <= lakeHeight && y >= lakeDepth){
+                        VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Water));
+                    }else{
+                        if(y == height-1){
 
-                        if(r.nextFloat() > 0.6){
-                            VertexPositionData.put(vertex);
-                            VertexColorData.put(color);
-                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
-                        }
-                        else if(r.nextFloat() > 0.3){
-                            if(lakes.size() < chunkMaxLakes)
-                                lakes.add(new Lake((int) xPos, (int) yPos, (int) zPos));
-                        }
-                        else{
-                            VertexPositionData.put(vertex);
-                            VertexColorData.put(color);
-                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Sand));
-                        }
-                    }
-                    else if(y == 0){
-                        VertexPositionData.put(vertex);
-                        VertexColorData.put(color);
-                        VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Bedrock));
-                    }
-                    else{
-                        if(r.nextFloat() > 0.5f){
-                            VertexPositionData.put(vertex);
-                            VertexColorData.put(color);
-                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Stone));
-                        }
-                        else{
-                            VertexPositionData.put(vertex);
-                            VertexColorData.put(color);
-                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Dirt));
+                            if(r.nextFloat() > 0.5){
+                                VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Grass));
+                            }else{
+                                VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Sand));
+                            }
+
+                        }else if(y == 0){
+                            VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Bedrock));
+                        }else{
+                            if(r.nextFloat() > 0.5f){
+                                VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Stone));
+                            }else{
+                                VertexTextureData.put(createTexCube((float)0, (float)0,Block.BlockType.Dirt));
+                            }
                         }
                     }
+
                 }
             }
         }
@@ -428,6 +449,7 @@ public class Chunks {
     }
     
     public Chunks(int startX, int startY, int startZ){
+
         try{
             texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("terrain.png"));
         }
@@ -449,9 +471,8 @@ public class Chunks {
         StartX = startX;
         StartY = startY;
         StartZ = startZ;
-        
-        chunkMaxLakes = r.nextInt(MAX_LAKES);
-        lakes = new ArrayList<>();
+
+ 
         rebuildMesh(startX, startY,startZ);
     }
 }
