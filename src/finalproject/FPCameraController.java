@@ -3,37 +3,43 @@
  * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
  * class: CS 4450- Computer Graphics * 
  * assignment: Checkpoint 3 
- * date last modified: 11/12/2021 * 
+ * date last modified: 11/26/2021 * 
  * purpose: This file defines a first person camera
  * ****************************************************************/ 
 
 package finalproject;
-
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import finalproject.gameLoops;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Random;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.glu.GLU;
+import static finalproject.gameLoops.displayUpdate;
+import org.lwjgl.Sys;
+
+
 
 public class FPCameraController{
     
     private final float GRAVITY = .015f;
     private final float TERMINAL_VELOCITY = 3.0f;
     private final float UPSPEED = 5.0f;
+    
     private final int MAX_CHUNKS = 3;
-    private ArrayList<Chunks> chunks;
-    private Vector3f position;
+    public ArrayList<Chunks> chunks;
+    public Vector3f position;
     private Vector3f lPosition;
+           
     //rotation around the Y axis of the camera
     private float yaw = 0.0f;
     //rotation around the X axis of the camera
     private float pitch = 0.0f;
     private Vector3Float me;
+   
     
     public FPCameraController(float x, float y, float z){
         position = new Vector3f(x,y,z);
@@ -134,11 +140,10 @@ public class FPCameraController{
         position.x -= xOffset;
         position.z += zOffset;
         
-       FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+        FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(lPosition.x-=xOffset).put(lPosition.y).put(lPosition.z+=zOffset).put(1.0f).flip();
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
-        
-        
+ 
     }
     
     //method: moveUp
@@ -153,8 +158,6 @@ public class FPCameraController{
         position.y += distance;
     }
     
- 
-    
     //method: lookThrough
     //purpose: transformation matrices for distance moved, and view change
     public void lookThrough(){
@@ -162,124 +165,51 @@ public class FPCameraController{
         glRotatef(yaw,0.0f,1.0f,0.0f);
         glTranslatef(position.x,position.y,position.z);
     }
-    
+
     //method: gameLoop
     //purpose: responsible for keeping track of inputs, camera 
     //view and pos every frame, as well as lighting.
-    public void gameLoop(){
-        FPCameraController camera = new FPCameraController(0,-100,0);
+ 
+    public void startGameLoop(){
+        FPCameraController camera = new FPCameraController(-54,-85,-60);
         boolean isJump = false;
         float fall = 0;
         float dx = 0.0f;
         float dy = 0.0f;
-        float dt = 0.0f;
-        float lastTime = 0.0f;
-        long time = 0;
         float mouseSensitivity = 0.09f;
         float movementSpeed = .35f;
         float previousY;
         float previousX;
         float previousZ;
-        boolean isFly = false;
-        Mouse.setGrabbed(true);
+        boolean isFly = false; 
+        
+        Player playa = new Player(new PlayerModel(20,45,20), yaw ,0,0,0);
+        gameLoops game = new gameLoops(0,0,0);
+        Mouse.setGrabbed(true);        
         while(!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
             
-            
-            //used to keep track of the last position of the camera so if there is collision
-            //send the camera back to this last position.
-            previousY = camera.position.y;
-            previousX = camera.position.x;
-            previousZ = camera.position.z;
-            
-            time = Sys.getTime();
-
-            lastTime = time;
             dx = Mouse.getDX();
             dy = Mouse.getDY();
             camera.yaw(dx * mouseSensitivity);
-            camera.pitch(dy * mouseSensitivity);
-            
-            if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-                camera.walkForward(movementSpeed);
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-                camera.walkBackwards(movementSpeed);
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-                camera.strafeLeft(movementSpeed);
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-                camera.strafeRight(movementSpeed);
-            }
-            //allows you to fly around the map without gravity/ jumping mechanics
-            if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
-                isFly = true;
-            }   
-            //activates gravity and jumping
-            if(Keyboard.isKeyDown(Keyboard.KEY_L)){
-                isFly = false;
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-                
-                if(!isJump && !isFly)
-                    camera.moveUp(UPSPEED);
-                else
-                    camera.moveUp(movementSpeed);
-              
-                isJump = true;
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-                camera.moveDown(movementSpeed);
-            }
-            
-            float terrainHeight = chunks.get(0).getHeightOfTerrain(camera.position.x, camera.position.z);
-            //applies gravity to the camera until it accelerates to TERMINAL_VELOCITY in which it will fall at a constant speed.
-            if(!isFly){
-                fall += GRAVITY;
-                if (fall > TERMINAL_VELOCITY){
-                    fall = TERMINAL_VELOCITY;
-                }
-                camera.moveDown(fall);
-            }
-            
-            
-
-            //if the camera falls below the terrain, move the camera on top of the terrain
-            //(blocks camera from falling through the floor)
-            if(camera.position.y > -terrainHeight*2){
-
-                camera.position.y = -terrainHeight*2;
-                isJump = false;
-                fall = 0;
-                //if the camera position goes from a lower position to a higher position
-                //(i.e from a block that is shorter to a block that is taller)
-                //move the camera to its previous position.
-                if(camera.position.y < previousY){
-                    camera.position.y = previousY;
-                    camera.position.x = previousX;
-                    camera.position.z = previousZ;
-                }
-                
-            }
-            
-            
+            camera.pitch(dy * mouseSensitivity);                   
             glLoadIdentity();
             camera.lookThrough();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-
-            lightPosition.put(100.0f).put(120.0f).put(100.0f).put(2.0f).flip();
-
+            lightPosition.put(90).put(150).put(90).put(1.5f).flip();
             glLight(GL_LIGHT0, GL_POSITION, lightPosition);
             
             for(Chunks chunk : chunks)
-                chunk.render();
-            
-            Display.update();
-            Display.sync(60);
-            
+                chunk.render();       
+                        
+            playa.modelo.render();            
+            game.gameLoopCamera(camera, playa); 
+            //displayUpdate(); 
+            Display.destroy();      
+
         }
-        Display.destroy();
+
     }
+    
 }

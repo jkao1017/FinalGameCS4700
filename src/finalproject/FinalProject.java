@@ -3,7 +3,7 @@
  * author: Jonathan Kao, Mohammed Bari, Viswadeep Manam
  * class: CS 4450- Computer Graphics * 
  * assignment: Checkpoint 3 
- * date last modified: 11/12/2021 * 
+ * date last modified: 11/26/2021 * 
  * purpose: This file is responsible for initializing everything and starting the program.
  * ****************************************************************/ 
 package finalproject;
@@ -20,7 +20,7 @@ public class FinalProject {
     private FPCameraController fp;
     private DisplayMode displayMode;
     private FloatBuffer lightPosition;
-    private FloatBuffer whiteLight;
+    private FloatBuffer whiteLight;   
     
     //method: start
     //purpose: initalizes window and camera 
@@ -30,7 +30,8 @@ public class FinalProject {
             createWindow();
             initGL();
             fp = new FPCameraController(0f,0f,0f);
-            fp.gameLoop();
+            fp.startGameLoop();
+
             
         }catch(Exception e){
             e.printStackTrace();
@@ -43,7 +44,8 @@ public class FinalProject {
         Display.setFullscreen(false);
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for(int i = 0; i< d.length; i++){
-            if(d[i].getWidth() == 640 && d[i].getHeight() == 480 && d[i].getBitsPerPixel() == 32){
+            //640 480
+            if(d[i].getWidth() == 1920 && d[i].getHeight() == 1080 && d[i].getBitsPerPixel() == 32){
                 displayMode = d[i];
                 break;
             } 
@@ -67,7 +69,6 @@ public class FinalProject {
         glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
         
         initLightArrays();
-
         glShadeModel(GL_SMOOTH);
         glLight(GL_LIGHT0, GL_POSITION, lightPosition); //sets our light’s position
         glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);//sets our specular light
@@ -77,7 +78,6 @@ public class FinalProject {
         glEnable(GL_LIGHT0);//enables light0
     }
     
-
     //method: initLightArrays
     //purpose: initalizes light
     private void initLightArrays() {
@@ -87,7 +87,6 @@ public class FinalProject {
         whiteLight.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
     }
     
-
     public static void main(String[] args) {
         FinalProject basic = new FinalProject();
         basic.start();
